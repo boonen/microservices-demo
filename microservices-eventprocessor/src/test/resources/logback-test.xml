@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scanPeriod="5 seconds" scan="true">
+
+    <property name="APP_NAME" value="security-services"/>
+    <contextName>${APP_NAME}</contextName>
+    <jmxConfigurator/>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="warn">
+        <appender-ref ref="stdout"/>
+    </root>
+
+    <logger name="com.geodan" level="debug"/>
+    <!-- <logger name="org.hibernate.SQL" level="debug" /> -->
+    <!-- <logger name="org.hibernate.hql" level="debug" /> -->
+    <!-- <logger name="org.hibernate.type" level="trace" /> -->
+    <!-- <logger name="org.hibernate.cache" level="trace" /> -->
+    <!-- <logger name="org.springframework.web" level="debug" /> -->
+    <!-- <logger name="org.springframework.security" level="debug" /> -->
+    <!-- <logger name="org.springframework.cache" level="debug" /> -->
+    <!-- <logger name="net.sf.ehcache" level="debug" /> -->
+    <!-- <logger name="org.springframework.cache" level="debug" /> -->
+    <!-- <logger name="org.hibernate.validator" level="debug" /> -->
+    <!-- <logger name="org.springframework.validation" level="debug" /> -->
+    <logger name="org.springframework.ldap" level="debug"/>
+</configuration>

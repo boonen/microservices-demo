@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scanPeriod="5 seconds" scan="true">
+
+    <property name="APP_NAME" value="security-services"/>
+    <contextName>${APP_NAME}</contextName>
+    <jmxConfigurator/>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <if condition='isDefined("catalina.base")'>
+        <then>
+            <appender name="file"
+                      class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <File>${catalina.base}/logs/${APP_NAME}.log</File>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <FileNamePattern>
+                        ${catalina.base}/logs/${APP_NAME}.%d{yyyy-MM-dd}.%i.log.zip
+                    </FileNamePattern>
+                    <!-- keep 14 days' worth of history -->
+                    <MaxHistory>14</MaxHistory>
+                    <!-- limit the size of the logfile to 10MB -->
+                    <TimeBasedFileNamingAndTriggeringPolicy
+                            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                        <MaxFileSize>10MB</MaxFileSize>
+                    </TimeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+
+                <encoder>
+                    <pattern>%d [%-5level] %c{1}:%L - %msg%n</pattern>
+                </encoder>
+            </appender>
+
+            <root level="warn">
+                <appender-ref ref="file"/>
+            </root>
+        </then>
+        <else>
+            <root level="info">
+                <appender-ref ref="stdout"/>
+            </root>
+
+            <logger name="com.geodan" level="debug"/>
+        </else>
+    </if>
+
+    <!-- <logger name="com.geodan" level="debug" /> -->
+    <!-- <logger name="org.hibernate.SQL" level="debug" /> -->
+    <!-- <logger name="org.hibernate.hql" level="debug" /> -->
+    <!-- <logger name="org.hibernate.type" level="trace" /> -->
+    <!-- <logger name="org.hibernate.cache" level="trace" /> -->
+    <!-- <logger name="org.springframework.web" level="debug" /> -->
+    <!-- <logger name="org.springframework.security" level="debug" /> -->
+    <!-- <logger name="org.springframework.cache" level="debug" /> -->
+    <!-- <logger name="net.sf.ehcache" level="debug" /> -->
+    <!-- <logger name="org.springframework.cache" level="debug" /> -->
+    <!-- <logger name="org.hibernate.validator" level="debug" /> -->
+    <!-- <logger name="org.springframework.validation" level="debug" /> -->
+
+</configuration>

@@ -3,16 +3,26 @@ package com.geodan.labs.microservices.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vividsolutions.jts.geom.Geometry;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Created by janb on 17-11-2014.
  */
+@Entity
+@Table(name = "railwaystations")
 public class RailwayStation {
 
+    @Id
     private int id;
 
+    @Column(name = "station")
     private String name;
 
     @JsonIgnore
+    @org.hibernate.annotations.Type(type = "org.hibernate.spatial.GeometryType")
     private Geometry geometry;
 
     public int getId() {
