@@ -1,5 +1,8 @@
 package com.geodan.labs.microservices.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -8,7 +11,9 @@ import java.util.UUID;
 /**
  * Created by janb on 16-11-2014.
  */
-public class DemoMessage implements Serializable {
+public class LocationMessage implements Serializable {
+
+    private final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 28992);
 
     private DateTime dateReceived;
 
@@ -16,11 +21,15 @@ public class DemoMessage implements Serializable {
 
     private String message;
 
-    public DemoMessage() {
+    private double x;
+
+    private double y;
+
+    public LocationMessage() {
         super();
     }
 
-    public DemoMessage(String message) {
+    public LocationMessage(String message) {
         this();
         this.message = message;
     }
@@ -45,16 +54,20 @@ public class DemoMessage implements Serializable {
         this.message = message;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DemoMessage)) return false;
+    public double getX() {
+        return x;
+    }
 
-        DemoMessage that = (DemoMessage) o;
+    public void setX(double x) {
+        this.x = x;
+    }
 
-        if (!messageIdentifier.equals(that.messageIdentifier)) return false;
+    public double getY() {
+        return y;
+    }
 
-        return true;
+    public void setY(double y) {
+        this.y = y;
     }
 
     @Override
@@ -63,8 +76,26 @@ public class DemoMessage implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LocationMessage)) return false;
+
+        LocationMessage that = (LocationMessage) o;
+
+        if (!messageIdentifier.equals(that.messageIdentifier)) return false;
+
+        return true;
+    }
+
+    @Override
     public String toString() {
         return messageIdentifier.toString();
+    }
+
+    @JsonIgnore
+    public Geometry getGeometry() {
+        CoordinateSequence coordinate = new CoordinateArraySequence(new Coordinate[]{new Coordinate(x, y)});
+        return new Point(coordinate, geometryFactory);
     }
 
     public static class Builder {
@@ -82,8 +113,8 @@ public class DemoMessage implements Serializable {
             return this;
         }
 
-        public DemoMessage build() {
-            return new DemoMessage();
+        public LocationMessage build() {
+            return new LocationMessage();
         }
     }
 }

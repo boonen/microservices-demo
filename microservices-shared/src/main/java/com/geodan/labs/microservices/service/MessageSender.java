@@ -1,6 +1,6 @@
 package com.geodan.labs.microservices.service;
 
-import com.geodan.labs.microservices.entity.DemoMessage;
+import com.geodan.labs.microservices.entity.LocationMessage;
 import com.geodan.labs.microservices.entity.MessageStatus;
 
 /**
@@ -14,6 +14,6 @@ public interface MessageSender {
      * @param message
      * @return the status that was returned by the service
      */
-    MessageStatus send(DemoMessage message);
+    MessageStatus send(LocationMessage message);
 
 }
