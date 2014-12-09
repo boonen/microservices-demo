@@ -1,6 +1,6 @@
 package com.geodan.labs.microservices.service;
 
-import com.geodan.labs.microservices.entity.DemoMessage;
+import com.geodan.labs.microservices.entity.LocationMessage;
 
 /**
  * Created by janb on 20-11-2014.
@@ -13,6 +13,6 @@ public interface MessageReceiver {
      * @param message the Message that is received.
      * @return the status that was returned by the service
      */
-    void onReceive(DemoMessage message);
+    void onReceive(LocationMessage message);
 
 }
