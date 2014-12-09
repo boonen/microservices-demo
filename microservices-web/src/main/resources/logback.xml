@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<configuration scanPeriod="5 seconds" scan="true">
+<configuration scanPeriod="30 seconds" scan="true">
 
-    <property name="APP_NAME" value="security-services"/>
-    <contextName>${APP_NAME}</contextName>
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%t] --- %-40.40logger{39} : %m%n%wex"/>
     <jmxConfigurator/>
 
-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d %5p %c{1}:%L - %m%n</pattern>
-        </encoder>
-    </appender>
-
-    <if condition='isDefined("catalina.base")'>
+    <if condition='isDefined("CONSOLE_LOGGER")'>
         <then>
+            <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>${FILE_LOG_PATTERN}</pattern>
+                </encoder>
+            </appender>
+
+            <root level="info">
+                <appender-ref ref="stdout"/>
+            </root>
+
+            <logger name="com.geodan" level="debug"/>
+        </then>
+        <else>
             <appender name="file"
                       class="ch.qos.logback.core.rolling.RollingFileAppender">
-                <File>${catalina.base}/logs/${APP_NAME}.log</File>
+                <File>${LOG_FILE}</File>
                 <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                    <FileNamePattern>
-                        ${catalina.base}/logs/${APP_NAME}.%d{yyyy-MM-dd}.%i.log.zip
-                    </FileNamePattern>
+                    <FileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log.zip</FileNamePattern>
                     <!-- keep 14 days' worth of history -->
                     <MaxHistory>14</MaxHistory>
                     <!-- limit the size of the logfile to 10MB -->
@@ -30,20 +36,15 @@
                 </rollingPolicy>
 
                 <encoder>
-                    <pattern>%d [%-5level] %c{1}:%L - %msg%n</pattern>
+                    <pattern>${FILE_LOG_PATTERN}</pattern>
                 </encoder>
             </appender>
 
             <root level="warn">
                 <appender-ref ref="file"/>
             </root>
-        </then>
-        <else>
-            <root level="info">
-                <appender-ref ref="stdout"/>
-            </root>
 
-            <logger name="com.geodan" level="debug"/>
+            <logger name="com.geodan" level="info"/>
         </else>
     </if>
 

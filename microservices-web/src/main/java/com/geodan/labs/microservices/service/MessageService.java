@@ -1,6 +1,6 @@
 package com.geodan.labs.microservices.service;
 
-import com.geodan.labs.microservices.entity.DemoMessage;
+import com.geodan.labs.microservices.entity.LocationMessage;
 
 import java.util.Collection;
 
@@ -9,6 +9,6 @@ import java.util.Collection;
  */
 public interface MessageService {
 
-    Collection<DemoMessage> findAll();
+    Collection<LocationMessage> findAll();
 
 }

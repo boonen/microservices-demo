@@ -1,6 +1,6 @@
 package com.geodan.labs.microservices.service;
 
-import com.geodan.labs.microservices.entity.DemoMessage;
+import com.geodan.labs.microservices.entity.LocationMessage;
 import com.geodan.labs.microservices.entity.MessageStatus;
 import com.geodan.labs.microservices.entity.StatusType;
 import org.springframework.amqp.AmqpException;
@@ -13,13 +13,13 @@ import javax.annotation.Resource;
  * Created by janb on 16-11-2014.
  */
 @Service
-public class AMQPMessageSender implements MessageSender {
+public class AMQPIncomingLocationMessageSender implements MessageSender {
 
     @Resource
     private RabbitTemplate rabbitTemplate;
 
     @Override
-    public MessageStatus send(DemoMessage message) {
+    public MessageStatus send(LocationMessage message) {
         try {
             rabbitTemplate.convertAndSend(message);
         } catch (AmqpException e) {

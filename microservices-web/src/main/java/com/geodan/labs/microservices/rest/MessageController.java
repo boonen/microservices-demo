@@ -1,15 +1,17 @@
 package com.geodan.labs.microservices.rest;
 
-import com.geodan.labs.microservices.entity.DemoMessage;
+import com.geodan.labs.microservices.entity.LocationMessage;
 import com.geodan.labs.microservices.entity.MessageStatus;
-import com.geodan.labs.microservices.service.AMQPMessageSender;
+import com.geodan.labs.microservices.service.AMQPIncomingLocationMessageSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by janb on 12-11-2014.
@@ -18,27 +20,17 @@ import java.util.UUID;
 @RequestMapping("/messages")
 public class MessageController {
 
-    private int i = 1;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Resource
-    private AMQPMessageSender messageSender;
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public DemoMessage getMessageById(@PathVariable UUID id) {
-        return DemoMessage.Builder.demoMessage().build();
-    }
+    private AMQPIncomingLocationMessageSender messageSender;
 
     @RequestMapping(value = "/send", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public MessageStatus postMessage(@RequestBody DemoMessage message) {
-        DemoMessage message2 = DemoMessage.Builder.demoMessage().withMessage("Message " + i).build();
+    public MessageStatus postMessage(@RequestBody LocationMessage message) {
+        logger.info("Received a location: {},{}.", message.getX(), message.getY());
         MessageStatus result = messageSender.send(message);
-        i++;
-        return result;
-    }
 
-    @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<DemoMessage> getMessages() {
-        return Collections.emptyList();
+        return result;
     }
 
 }
