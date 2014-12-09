@@ -1,14 +1,38 @@
 web:
   build: microservices-web/. # Use the Dockerfile under my myapp-api
-  working_dir: ./bin/microservices-web
+  working_dir: /opt
   # Let this container talk to rabbitmq
   links:
     - rabbitmq
+    - admin
   ports:
-    - "8081:8080"
+    - "8081:8081"
   # Share the cwd on my mac with the container
   volumes:
-    - .:./bin/microservices-web
+    - /data/microservices/web:/home
+
+eventprocessor:
+  build: microservices-eventprocessor/. # Use the Dockerfile under my myapp-api
+  working_dir: ./bin/microservices-eventprocessor
+  # Let this container talk to rabbitmq
+  links:
+    - rabbitmq
+    - db
+    - admin
+  ports:
+    - "8082:8082"
+  # Share the cwd on my mac with the container
+  volumes:
+    - /data/microservices/eventprocessor:/opt/microservices-eventprocessor
+
+db:
+  build: postgis-railways/.
+# Expose the port so we can access the database
+  ports:
+    - "5432:5432"
+  # Persist the data between containers.
+  volumes:
+    - /data/microservices/postgresql:/var/lib/postgresql
 
 # The default RabbitMQ is good enough here
 rabbitmq:
@@ -19,5 +43,14 @@ rabbitmq:
     - "15672:15672"
   # Persist the data between containers.
   volumes:
-    - ./data:/data/rabbitmq/log
-    - ./data:/data/rabbitmq/mnesia
+    - /data/microservices/rabbitmq/log:/data/rabbitmq/log
+    - /data/microservices/rabbitmq/mnesia:/data/rabbitmq/mnesia
+
+admin:
+  build: microservices-admin/. # Use the Dockerfile under my myapp-api
+  working_dir: ./bin/microservices-admin
+  ports:
+    - "8080:8080"
+  # Share the cwd on my mac with the container
+  volumes:
+    - /data/microservices/admin:/opt/microservices-admin
