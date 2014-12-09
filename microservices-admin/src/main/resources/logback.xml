@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scanPeriod="5 seconds" scan="true">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <jmxConfigurator/>
+
+    <if condition='isDefined("CONSOLE_LOGGER")'>
+        <then>
+            <root level="info">
+                <appender-ref ref="CONSOLE"/>
+                <logger name="com.geodan" level="debug"/>
+            </root>
+        </then>
+        <else>
+            <root level="warn">
+                <appender-ref ref="FILE"/>
+            </root>
+        </else>
+    </if>
+
+    <!-- <logger name="com.geodan" level="debug" /> -->
+    <!-- <logger name="org.hibernate.SQL" level="debug" /> -->
+    <!-- <logger name="org.hibernate.hql" level="debug" /> -->
+    <!-- <logger name="org.hibernate.type" level="trace" /> -->
+    <!-- <logger name="org.hibernate.cache" level="trace" /> -->
+    <!-- <logger name="org.springframework.web" level="debug" /> -->
+    <!-- <logger name="org.springframework.security" level="debug" /> -->
+    <!-- <logger name="org.springframework.cache" level="debug" /> -->
+    <!-- <logger name="net.sf.ehcache" level="debug" /> -->
+    <!-- <logger name="org.springframework.cache" level="debug" /> -->
+    <!-- <logger name="org.hibernate.validator" level="debug" /> -->
+    <!-- <logger name="org.springframework.validation" level="debug" /> -->
+
+</configuration>
